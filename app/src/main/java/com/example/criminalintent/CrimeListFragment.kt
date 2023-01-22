@@ -37,6 +37,10 @@ class CrimeListFragment : Fragment() {
 
         binding.crimeRecyclerView.layoutManager = LinearLayoutManager(context)
 
+        val crimes = crimeListViewModel.crimes
+        val adapter = CrimeListAdapter(crimes)
+        binding.crimeRecyclerView.adapter = adapter
+
         return binding.root
     }
 
