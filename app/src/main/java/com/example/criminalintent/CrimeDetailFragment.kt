@@ -7,7 +7,8 @@ import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import com.example.criminalintent.databinding.FragmentCrimeDetailBinding
-import java.util.*
+import java.util.Date
+import java.util.UUID
 
 class CrimeDetailFragment : Fragment() {
 
@@ -34,8 +35,8 @@ class CrimeDetailFragment : Fragment() {
 		inflater: LayoutInflater,
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
-	): View {
-		_binding = FragmentCrimeDetailBinding.inflate(layoutInflater, container, false)
+	): View? {
+		_binding = FragmentCrimeDetailBinding.inflate(inflater, container, false)
 		return binding.root
 	}
 
