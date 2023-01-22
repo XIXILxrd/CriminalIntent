@@ -8,7 +8,7 @@ class MainActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
 
-		val fragment = CrimeDetailFragment()
+		val fragment = CrimeListFragment()
 		supportFragmentManager
 			.beginTransaction()
 			.add(R.id.fragment_container, fragment)
