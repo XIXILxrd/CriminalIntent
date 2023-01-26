@@ -1,5 +1,7 @@
 package com.example.criminalintent
 
+import android.icu.text.DateFormat
+import android.icu.text.DateFormat.getDateInstance
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,7 +36,7 @@ class CrimeDetailFragment : Fragment() {
 		inflater: LayoutInflater,
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
-	): View? {
+	): View {
 		_binding = FragmentCrimeDetailBinding.inflate(inflater, container, false)
 		return binding.root
 	}
@@ -48,7 +50,7 @@ class CrimeDetailFragment : Fragment() {
 			}
 
 			crimeDate.apply {
-				text = crime.date.toString()
+				text = getDateInstance(DateFormat.FULL, Locale.US).format(crime.date).toString()
 				isEnabled = false
 			}
 
