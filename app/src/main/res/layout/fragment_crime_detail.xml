@@ -18,7 +18,8 @@
         android:layout_height="wrap_content"
         android:hint="@string/crime_title_hint"
         android:importantForAutofill="no"
-        android:inputType="text" />
+        android:inputType="text"
+        android:minHeight="48dp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -31,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:text="Wed May 11:56 EST 2022" />
-    
+
     <CheckBox
         android:id="@+id/crime_solved"
         android:layout_width="match_parent"
