@@ -11,12 +11,12 @@ import java.util.*
 class CrimeHolder(
     private val binding: ListItemCrimeBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(crime: Crime, onCrimeClicked: () -> Unit) {
+    fun bind(crime: Crime, onCrimeClicked: (crimeId: UUID) -> Unit) {
         binding.crimeTitle.text = crime.title
         binding.crimeDate.text = DateFormat.getDateInstance(DateFormat.FULL, Locale.US).format(crime.date).toString()
 
         binding.root.setOnClickListener {
-            onCrimeClicked()
+            onCrimeClicked(crime.id)
         }
 
         binding.crimeSolved.visibility = if (crime.isSolved) {
@@ -30,7 +30,7 @@ class CrimeHolder(
 
 class CrimeListAdapter(
     private val crimes: List<Crime>,
-    private val onCrimeClicked: () -> Unit
+    private val onCrimeClicked: (crimeId: UUID) -> Unit
 ) : RecyclerView.Adapter<CrimeHolder>() {
 
     override fun onCreateViewHolder(

@@ -3,17 +3,23 @@ package com.example.criminalintent
 import android.icu.text.DateFormat
 import android.icu.text.DateFormat.getDateInstance
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import com.example.criminalintent.databinding.FragmentCrimeDetailBinding
 import java.util.*
+
+private const val TAG = "CrimeDetailFragment"
 
 class CrimeDetailFragment : Fragment() {
 
 	private lateinit var crime: Crime
+
+	private val args: CrimeDetailFragmentArgs by navArgs()
 
 	private var _binding: FragmentCrimeDetailBinding? = null
 	private val binding
@@ -24,12 +30,6 @@ class CrimeDetailFragment : Fragment() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 
-		crime = Crime(
-			id = UUID.randomUUID(),
-			title = "",
-			date = Date(),
-			isSolved = false
-		)
 	}
 
 	override fun onCreateView(
@@ -46,16 +46,13 @@ class CrimeDetailFragment : Fragment() {
 
 		binding.apply {
 			crimeTitle.doOnTextChanged { text, _, _, _ ->
-				crime = crime.copy(title = text.toString())
 			}
 
 			crimeDate.apply {
-				text = getDateInstance(DateFormat.FULL, Locale.US).format(crime.date).toString()
 				isEnabled = false
 			}
 
 			crimeSolved.setOnCheckedChangeListener { _, isChecked ->
-				crime = crime.copy(isSolved = isChecked)
 			}
 		}
 	}
