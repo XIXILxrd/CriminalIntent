@@ -6,4 +6,5 @@
     <string name="crime_solved_label">Solved</string>
     <string name="crime_title">Crime title</string>
     <string name="crime_date">Crime date</string>
+    <string name="untitled_crime_toast">Enter a title for the crime! It is impossible to solve a crime if you do not know what crime occurred. </string>
 </resources>
