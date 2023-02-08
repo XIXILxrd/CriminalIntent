@@ -90,6 +90,7 @@ class CrimeDetailFragment : Fragment() {
 			}
 		}
 
+
 		setFragmentResultListener(
 			DatePickerFragment.REQUEST_KEY_DATE
 		) { _, bundle ->
@@ -100,12 +101,12 @@ class CrimeDetailFragment : Fragment() {
 		}
 
 		setFragmentResultListener(
-			TimePickerFragment.REQUEST_KEY_TIME
+			TimePickerFragment.REQUEST_KEY_TIME,
 		) { _, bundle ->
 			val newTime =
-				bundle.getSerializable(DatePickerFragment.BUNDLE_KEY_DATE) as Date
+				bundle.getSerializable(TimePickerFragment.BUNDLE_KEY_TIME) as Date
 
-			crimeDetailViewModel.updateCrime { it.copy(date = newTime) }
+				crimeDetailViewModel.updateCrime { it.copy(date = newTime) }
 		}
 	}
 
@@ -121,9 +122,6 @@ class CrimeDetailFragment : Fragment() {
 				crimeTitle.setText(crime.title)
 			}
 
-			crimeDate.text = DateFormat.getDateInstance(DateFormat.FULL)
-				.format(crime.date).toString()
-
 			crimeDate.setOnClickListener {
 				findNavController().navigate(
 					CrimeDetailFragmentDirections.selectDate(crime.date)
@@ -136,8 +134,13 @@ class CrimeDetailFragment : Fragment() {
 				)
 			}
 
-			crimeSolved.isChecked = crime.isSolved
- 		}
-	}
+			crimeDate.text = DateFormat.getDateInstance(DateFormat.FULL)
+				.format(crime.date).toString()
 
+			crimeTime.text = DateFormat.getTimeInstance(DateFormat.SHORT)
+				.format(crime.date).toString()
+
+			crimeSolved.isChecked = crime.isSolved
+		}
+	}
 }

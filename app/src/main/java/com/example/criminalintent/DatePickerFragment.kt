@@ -2,14 +2,13 @@ package com.example.criminalintent
 
 import android.app.DatePickerDialog
 import android.app.Dialog
-import android.icu.util.Calendar
 import android.os.Bundle
 import android.widget.DatePicker
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.navArgs
-import java.util.GregorianCalendar
+import java.util.*
 
 class DatePickerFragment : DialogFragment() {
 
@@ -19,9 +18,11 @@ class DatePickerFragment : DialogFragment() {
         val dateListener = DatePickerDialog.OnDateSetListener {
                 _: DatePicker, year: Int, month: Int, day: Int ->
 
-            val resultDate = GregorianCalendar(year, month, day).time
+            val resultDate = Calendar.getInstance()
 
-            setFragmentResult(REQUEST_KEY_DATE, bundleOf(BUNDLE_KEY_DATE to resultDate))
+            resultDate.set(year, month, day)
+
+            setFragmentResult(REQUEST_KEY_DATE, bundleOf(BUNDLE_KEY_DATE to resultDate.time))
         }
 
         val calendar = Calendar.getInstance()

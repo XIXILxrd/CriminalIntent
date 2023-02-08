@@ -8,21 +8,20 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.navArgs
-import java.text.DateFormat
-import java.time.Year
 import java.util.*
-import java.util.Calendar.*
 
 class TimePickerFragment : DialogFragment() {
 
     private val args: TimePickerFragmentArgs by navArgs()
-    private val dateArgs: DatePickerFragmentArgs by navArgs()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val timeListener = TimePickerDialog.OnTimeSetListener {
-            _: TimePicker, hour: Int, minute: Int ->
+            _: TimePicker, hourOfDay: Int, minute: Int ->
 
-            val resultTime = GregorianCalendar()
+            val resultTime = Calendar.getInstance()
+
+            resultTime.set( Calendar.HOUR_OF_DAY, hourOfDay)
+            resultTime.set(Calendar.MINUTE, minute)
 
 
             setFragmentResult(REQUEST_KEY_TIME, bundleOf(BUNDLE_KEY_TIME to resultTime))
