@@ -103,7 +103,7 @@ class CrimeDetailFragment : Fragment() {
 			TimePickerFragment.REQUEST_KEY_TIME
 		) { _, bundle ->
 			val newTime =
-				bundle.getSerializable(TimePickerFragment.BUNDLE_KEY_TIME) as Date
+				bundle.getSerializable(DatePickerFragment.BUNDLE_KEY_DATE) as Date
 
 			crimeDetailViewModel.updateCrime { it.copy(date = newTime) }
 		}
@@ -122,9 +122,6 @@ class CrimeDetailFragment : Fragment() {
 			}
 
 			crimeDate.text = DateFormat.getDateInstance(DateFormat.FULL)
-				.format(crime.date).toString()
-
-			crimeTime.text = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.SHORT)
 				.format(crime.date).toString()
 
 			crimeDate.setOnClickListener {
