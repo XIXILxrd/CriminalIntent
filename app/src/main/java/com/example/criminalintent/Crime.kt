@@ -10,6 +10,5 @@ data class Crime(
 	@PrimaryKey val id: UUID,
 	val title: String,
 	val date: Date,
-	val time: Date,
 	val isSolved: Boolean
 )

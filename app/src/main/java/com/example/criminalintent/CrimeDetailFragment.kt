@@ -1,5 +1,6 @@
 package com.example.criminalintent
 
+import android.icu.text.DateFormat
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -94,11 +95,8 @@ class CrimeDetailFragment : Fragment() {
 		) { _, bundle ->
 			val newDate =
 				bundle.getSerializable(DatePickerFragment.BUNDLE_KEY_DATE) as Date
-			val newTime =
-				bundle.getSerializable(TimePickerFragment.BUNDLE_KEY_TIME) as Date
 
 			crimeDetailViewModel.updateCrime { it.copy(date = newDate) }
-			crimeDetailViewModel.updateCrime { it.copy(time = newTime) }
 		}
 	}
 
@@ -113,16 +111,14 @@ class CrimeDetailFragment : Fragment() {
 			if (crimeTitle.text.toString() != crime.title) {
 				crimeTitle.setText(crime.title)
 			}
-			crimeDate.text = crime.date.toString()
-			crimeTime.text = crime.time.toString()
+			crimeDate.text = DateFormat.getDateInstance(DateFormat.FULL, Locale.US)
+				.format(crime.date).toString()
 
 			crimeDate.setOnClickListener {
 				findNavController().navigate(
 					CrimeDetailFragmentDirections.selectDate(crime.date)
 				)
 			}
-
-
 
 			crimeSolved.isChecked = crime.isSolved
  		}
