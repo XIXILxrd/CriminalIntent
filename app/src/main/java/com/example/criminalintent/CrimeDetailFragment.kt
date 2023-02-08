@@ -98,6 +98,15 @@ class CrimeDetailFragment : Fragment() {
 
 			crimeDetailViewModel.updateCrime { it.copy(date = newDate) }
 		}
+
+		setFragmentResultListener(
+			TimePickerFragment.REQUEST_KEY_TIME
+		) { _, bundle ->
+			val newTime =
+				bundle.getSerializable(TimePickerFragment.BUNDLE_KEY_TIME) as Date
+
+			crimeDetailViewModel.updateCrime { it.copy(date = newTime) }
+		}
 	}
 
 	override fun onDestroyView() {
@@ -111,12 +120,22 @@ class CrimeDetailFragment : Fragment() {
 			if (crimeTitle.text.toString() != crime.title) {
 				crimeTitle.setText(crime.title)
 			}
-			crimeDate.text = DateFormat.getDateInstance(DateFormat.FULL, Locale.US)
+
+			crimeDate.text = DateFormat.getDateInstance(DateFormat.FULL)
+				.format(crime.date).toString()
+
+			crimeTime.text = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.SHORT)
 				.format(crime.date).toString()
 
 			crimeDate.setOnClickListener {
 				findNavController().navigate(
 					CrimeDetailFragmentDirections.selectDate(crime.date)
+				)
+			}
+
+			crimeTime.setOnClickListener {
+				findNavController().navigate(
+					CrimeDetailFragmentDirections.selectTime(crime.date)
 				)
 			}
 
