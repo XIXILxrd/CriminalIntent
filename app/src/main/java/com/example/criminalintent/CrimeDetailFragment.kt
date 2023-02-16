@@ -20,7 +20,6 @@ import com.example.criminalintent.databinding.FragmentCrimeDetailBinding
 import kotlinx.coroutines.launch
 import java.util.*
 
-@Suppress("DEPRECATION")
 class CrimeDetailFragment : Fragment() {
 
 	private val args: CrimeDetailFragmentArgs by navArgs()
@@ -90,23 +89,14 @@ class CrimeDetailFragment : Fragment() {
 			}
 		}
 
-
 		setFragmentResultListener(
 			DatePickerFragment.REQUEST_KEY_DATE
 		) { _, bundle ->
 			val newDate =
 				bundle.getSerializable(DatePickerFragment.BUNDLE_KEY_DATE) as Date
 
+
 			crimeDetailViewModel.updateCrime { it.copy(date = newDate) }
-		}
-
-		setFragmentResultListener(
-			TimePickerFragment.REQUEST_KEY_TIME,
-		) { _, bundle ->
-			val newTime =
-				bundle.getSerializable(TimePickerFragment.BUNDLE_KEY_TIME) as Date
-
-				crimeDetailViewModel.updateCrime { it.copy(date = newTime) }
 		}
 	}
 
@@ -128,17 +118,9 @@ class CrimeDetailFragment : Fragment() {
 				)
 			}
 
-			crimeTime.setOnClickListener {
-				findNavController().navigate(
-					CrimeDetailFragmentDirections.selectTime(crime.date)
-				)
-			}
-
 			crimeDate.text = DateFormat.getDateInstance(DateFormat.FULL)
 				.format(crime.date).toString()
-
-			crimeTime.text = DateFormat.getTimeInstance(DateFormat.SHORT)
-				.format(crime.date).toString()
+			
 
 			crimeSolved.isChecked = crime.isSolved
 		}
