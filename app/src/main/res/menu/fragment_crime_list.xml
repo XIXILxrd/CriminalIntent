@@ -5,5 +5,5 @@
         android:id="@+id/new_crime"
         android:icon="@drawable/ic_menu_add"
         android:title="@string/new_crime"
-        app:showAsAction="ifRoom|withText"/>
+        app:showAsAction="ifRoom"/>
 </menu>

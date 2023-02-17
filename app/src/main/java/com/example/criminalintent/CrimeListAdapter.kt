@@ -13,8 +13,12 @@ class CrimeHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(crime: Crime, onCrimeClicked: (crimeId: UUID) -> Unit) {
         binding.crimeTitle.text = crime.title
+
         binding.crimeDate.text = DateFormat.getDateInstance(DateFormat.FULL)
             .format(crime.date).toString()
+
+        binding.crimeTime.text = DateFormat.getTimeInstance(DateFormat.SHORT)
+            .format(crime.time).toString()
 
         binding.root.setOnClickListener {
             onCrimeClicked(crime.id)
