@@ -95,7 +95,6 @@ class CrimeDetailFragment : Fragment() {
 			val newDate =
 				bundle.getSerializable(DatePickerFragment.BUNDLE_KEY_DATE) as Date
 
-
 			crimeDetailViewModel.updateCrime { it.copy(date = newDate) }
 		}
 	}
