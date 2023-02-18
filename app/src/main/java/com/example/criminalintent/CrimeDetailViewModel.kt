@@ -37,6 +37,10 @@ class CrimeDetailViewModel(crimeId: UUID) : ViewModel() {
 			crimeRepository.updateCrime(it)
 		}
 	}
+
+	suspend fun deleteCrime(crime: Crime) {
+		crimeRepository.deleteCrime(crime)
+	}
 }
 
 class CrimeDetailViewModelFactory(

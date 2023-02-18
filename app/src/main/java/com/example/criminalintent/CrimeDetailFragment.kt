@@ -2,11 +2,11 @@ package com.example.criminalintent
 
 import android.icu.text.DateFormat
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -64,6 +64,8 @@ class CrimeDetailFragment : Fragment() {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+
+		createActionBar()
 
 		binding.apply {
 			crimeTitle.doOnTextChanged { text, _, _, _ ->
@@ -140,5 +142,34 @@ class CrimeDetailFragment : Fragment() {
 
 			crimeSolved.isChecked = crime.isSolved
 		}
+	}
+
+	private fun deleteAndExit() {
+		viewLifecycleOwner.lifecycleScope.launch {
+			crimeDetailViewModel.crime.value?.let {
+				crimeDetailViewModel.deleteCrime(it)
+			}
+			findNavController().popBackStack()
+		}
+	}
+
+	private fun createActionBar() {
+		val menuHost: MenuHost = requireActivity()
+
+		menuHost.addMenuProvider(object : MenuProvider {
+			override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+				menuInflater.inflate(R.menu.fragment_crime_detail, menu)
+			}
+
+			override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+				return when(menuItem.itemId) {
+					R.id.delete_crime -> {
+						deleteAndExit()
+						true
+					}
+					else -> onMenuItemSelected(menuItem)
+				}
+			}
+		}, viewLifecycleOwner, Lifecycle.State.RESUMED)
 	}
 }
