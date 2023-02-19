@@ -1,10 +1,14 @@
 package com.example.criminalintent
 
+import android.content.Intent
 import android.icu.text.DateFormat
+import android.net.Uri
+import android.text.format.DateFormat.format
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.widget.doOnTextChanged
@@ -20,12 +24,21 @@ import com.example.criminalintent.databinding.FragmentCrimeDetailBinding
 import kotlinx.coroutines.launch
 import java.util.*
 
+private const val DATE_FORMAT = "EEE, MMM, dd"
+private const val TIME_FORMAT = "HH:mm"
+
 class CrimeDetailFragment : Fragment() {
 
 	private val args: CrimeDetailFragmentArgs by navArgs()
 
 	private val crimeDetailViewModel: CrimeDetailViewModel by viewModels {
 		CrimeDetailViewModelFactory(args.crimeId)
+	}
+
+	private val selectResult = registerForActivityResult(
+		ActivityResultContracts.PickContact()
+	) { uri: Uri? ->
+		//TODO
 	}
 
 	private var _binding: FragmentCrimeDetailBinding? = null
@@ -78,6 +91,10 @@ class CrimeDetailFragment : Fragment() {
 				crimeDetailViewModel.updateCrime { oldCrime ->
 					oldCrime.copy(isSolved = isChecked)
 				}
+			}
+
+			crimeSuspect.setOnClickListener {
+				selectResult.launch(null)
 			}
 		}
 
@@ -141,7 +158,53 @@ class CrimeDetailFragment : Fragment() {
 				.format(crime.time).toString()
 
 			crimeSolved.isChecked = crime.isSolved
+
+			crimeReport.setOnClickListener {
+				val reportIntent = Intent(Intent.ACTION_SEND).apply {
+					type = "text/plain"
+
+					putExtra(Intent.EXTRA_TEXT, getCrimeReport(crime))
+					putExtra(
+						Intent.EXTRA_SUBJECT,
+						getString(R.string.crime_report_suspect)
+					)
+				}
+
+				val chooserIntent = Intent.createChooser(
+					reportIntent,
+					getString(R.string.send_report)
+				)
+
+				startActivity(chooserIntent)
+			}
+
+			crimeSuspect.text = crime.suspect.ifEmpty {
+				getString(R.string.crime_suspect_text)
+			}
 		}
+	}
+
+	private fun getCrimeReport(crime: Crime) : String {
+		val solvedString = if (crime.isSolved) {
+			getString(R.string.crime_report_solved)
+		} else {
+			getString(R.string.crime_report_unsolved)
+		}
+
+		val dateString = format(DATE_FORMAT, crime.date).toString()
+		val timeString = format(TIME_FORMAT, crime.time).toString()
+
+		val suspectText = if (crime.suspect.isBlank()) {
+			getString(R.string.crime_report_no_suspect)
+		} else {
+			getString(R.string.crime_report_suspect, crime.suspect)
+		}
+
+		return getString(
+			R.string.crime_report,
+			crime.title, dateString, timeString, solvedString, suspectText
+		)
+
 	}
 
 	private fun deleteAndExit() {

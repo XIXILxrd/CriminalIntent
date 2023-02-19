@@ -11,5 +11,6 @@ data class Crime(
 	val title: String,
 	val date: Date,
 	val time: Date,
-	val isSolved: Boolean
+	val isSolved: Boolean,
+	val suspect: String = ""
 )
