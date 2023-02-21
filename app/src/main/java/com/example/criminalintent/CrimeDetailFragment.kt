@@ -12,6 +12,7 @@ import android.view.*
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.widget.doOnTextChanged
@@ -25,6 +26,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.criminalintent.databinding.FragmentCrimeDetailBinding
 import kotlinx.coroutines.launch
+import java.io.File
 import java.util.*
 
 private const val DATE_FORMAT = "EEE, dd, MMM, yyyy"
@@ -45,6 +47,18 @@ class CrimeDetailFragment : Fragment() {
 			parseContactSelection(it)
 		}
 	}
+
+	private var takePhoto = registerForActivityResult(
+		ActivityResultContracts.TakePicture()
+	) { didTakePhoto: Boolean ->
+		if (didTakePhoto && photoName != null) {
+			crimeDetailViewModel.updateCrime { oldCrime ->
+				oldCrime.copy(photoFileName = photoName)
+			}
+		}
+	}
+
+	private var photoName: String? = null
 
 	private var _binding: FragmentCrimeDetailBinding? = null
 	private val binding
@@ -108,6 +122,26 @@ class CrimeDetailFragment : Fragment() {
 			)
 
 			crimeSuspect.isEnabled = canResolveIntent(selectSuspectIntent)
+
+			crimeCamera.setOnClickListener {
+				photoName = "IMG_${Date()}.JPG"
+				val photoFile = File(requireActivity().applicationContext.filesDir,
+									photoName)
+				val photoUri = FileProvider.getUriForFile(
+					requireContext(),
+					"com.example.criminalintent.fileprovider",
+					photoFile
+				)
+
+				takePhoto.launch(photoUri)
+			}
+
+			val captureImageIntent = takePhoto.contract.createIntent(
+				requireContext(),
+				null
+			)
+
+			crimeCamera.isEnabled = canResolveIntent(captureImageIntent)
 		}
 
 		viewLifecycleOwner.lifecycleScope.launch {
@@ -272,6 +306,9 @@ class CrimeDetailFragment : Fragment() {
 				intent,
 				PackageManager.MATCH_DEFAULT_ONLY
 			)
+
 		return resolvedActivity != null
 	}
+
+
 }
