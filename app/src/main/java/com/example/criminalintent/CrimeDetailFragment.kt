@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.core.view.doOnLayout
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -48,7 +49,7 @@ class CrimeDetailFragment : Fragment() {
 		}
 	}
 
-	private var takePhoto = registerForActivityResult(
+	private val takePhoto = registerForActivityResult(
 		ActivityResultContracts.TakePicture()
 	) { didTakePhoto: Boolean ->
 		if (didTakePhoto && photoName != null) {
@@ -125,8 +126,7 @@ class CrimeDetailFragment : Fragment() {
 
 			crimeCamera.setOnClickListener {
 				photoName = "IMG_${Date()}.JPG"
-				val photoFile = File(requireActivity().applicationContext.filesDir,
-									photoName)
+				val photoFile = File(requireActivity().applicationContext.filesDir, photoName)
 				val photoUri = FileProvider.getUriForFile(
 					requireContext(),
 					"com.example.criminalintent.fileprovider",
@@ -227,6 +227,8 @@ class CrimeDetailFragment : Fragment() {
 			crimeSuspect.text = crime.suspect.ifEmpty {
 				getString(R.string.crime_suspect_text)
 			}
+
+			updatePhoto(crime.photoFileName)
 		}
 	}
 
@@ -299,16 +301,36 @@ class CrimeDetailFragment : Fragment() {
 		}
 	}
 
-	private fun canResolveIntent(intent: Intent) : Boolean {
+	private fun canResolveIntent(intent: Intent): Boolean {
 		val packageManager: PackageManager = requireActivity().packageManager
 		val resolvedActivity: ResolveInfo? =
 			packageManager.resolveActivity(
 				intent,
 				PackageManager.MATCH_DEFAULT_ONLY
 			)
-
 		return resolvedActivity != null
 	}
 
+	private fun updatePhoto(photoFileName: String?) {
+		if (binding.crimePhoto.tag != photoFileName) {
+			val photoFile = photoFileName?.let {
+				File(requireContext().applicationContext.filesDir, it)
+			}
 
+			if (photoFile?.exists() == true) {
+				binding.crimePhoto.doOnLayout { measuredView ->
+					val scaledBitmap = getScaledBitmap(
+						photoFile.path,
+						measuredView.width,
+						measuredView.height
+					)
+					binding.crimePhoto.setImageBitmap(scaledBitmap)
+					binding.crimePhoto.tag = photoFileName
+				}
+			} else {
+				binding.crimePhoto.setImageBitmap(null)
+				binding.crimePhoto.tag = null
+			}
+		}
+	}
 }
