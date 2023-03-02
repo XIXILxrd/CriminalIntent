@@ -35,6 +35,12 @@ private const val TIME_FORMAT = "HH:mm"
 
 class CrimeDetailFragment : Fragment() {
 
+	private var _binding: FragmentCrimeDetailBinding? = null
+	private val binding
+		get() = checkNotNull(_binding) {
+			"Cannot access binding because it is null. Is the view visible?"
+		}
+
 	private val args: CrimeDetailFragmentArgs by navArgs()
 
 	private val crimeDetailViewModel: CrimeDetailViewModel by viewModels {
@@ -60,12 +66,6 @@ class CrimeDetailFragment : Fragment() {
 	}
 
 	private var photoName: String? = null
-
-	private var _binding: FragmentCrimeDetailBinding? = null
-	private val binding
-		get() = checkNotNull(_binding) {
-			"Cannot access binding because it is null. Is the view visible?"
-		}
 
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -135,13 +135,6 @@ class CrimeDetailFragment : Fragment() {
 
 				takePhoto.launch(photoUri)
 			}
-
-			val captureImageIntent = takePhoto.contract.createIntent(
-				requireContext(),
-				null
-			)
-
-			crimeCamera.isEnabled = canResolveIntent(captureImageIntent)
 		}
 
 		viewLifecycleOwner.lifecycleScope.launch {
