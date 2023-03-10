@@ -18,6 +18,7 @@ import androidx.core.view.MenuProvider
 import androidx.core.view.doOnLayout
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -124,6 +125,8 @@ class CrimeDetailFragment : Fragment() {
 
 			crimeSuspect.isEnabled = canResolveIntent(selectSuspectIntent)
 
+			crimePhoto.isEnabled = false
+
 			crimeCamera.setOnClickListener {
 				photoName = "IMG_${Date()}.JPG"
 				val photoFile = File(requireActivity().applicationContext.filesDir, photoName)
@@ -134,6 +137,16 @@ class CrimeDetailFragment : Fragment() {
 				)
 
 				takePhoto.launch(photoUri)
+
+				crimePhoto.isEnabled = true
+			}
+
+			crimePhoto.setOnClickListener {
+				val zoomedPictureDialogFragment = ZoomedPictureDialogFragment.newInstance(
+					crimeDetailViewModel.crime.value?.photoFileName
+				)
+
+				zoomedPictureDialogFragment.show(childFragmentManager, ZoomedPictureDialogFragment.PICTURE_DIALOG)
 			}
 		}
 
