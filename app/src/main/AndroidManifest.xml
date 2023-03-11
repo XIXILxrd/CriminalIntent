@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-feature android:name="android.hardware.camera"
-        android:required="false"/>
+        android:required="false" />
 
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <application
         android:name=".CriminalIntentApplication"
         android:allowBackup="true"

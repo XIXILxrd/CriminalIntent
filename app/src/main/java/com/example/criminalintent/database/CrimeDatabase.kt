@@ -21,10 +21,18 @@ val migration = object : Migration(1, 2) {
     }
 }
 
-val migrationThirdVersion = object : Migration(2, 3) {
+val migrationSecondVersion = object : Migration(2, 3) {
     override fun migrate(database: SupportSQLiteDatabase) {
         database.execSQL(
             "ALTER TABLE Crime ADD COLUMN photoFileName TEXT"
+        )
+    }
+}
+
+val migrationThirdVersion = object : Migration(3, 4) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL(
+            "ALTER TABLE Crime ADD COLUMN phoneNumber TEXT"
         )
     }
 }

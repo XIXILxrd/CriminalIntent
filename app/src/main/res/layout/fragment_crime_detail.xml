@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="16dp"
-    android:orientation="vertical">
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -96,10 +96,9 @@
         android:text="@string/crime_report_text" />
 
     <ImageButton
-        android:id="@+id/call_suspect"
+        android:id="@+id/call_contact"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="48dp"
         android:src="@drawable/ic_fragment_crime_detail_call" />
-
 </LinearLayout>

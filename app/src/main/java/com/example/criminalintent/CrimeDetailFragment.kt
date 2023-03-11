@@ -18,7 +18,6 @@ import androidx.core.view.MenuProvider
 import androidx.core.view.doOnLayout
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -81,8 +80,7 @@ class CrimeDetailFragment : Fragment() {
 						R.string.untitled_crime_toast,
 						Toast.LENGTH_LONG
 					).show()
-				}
-				else {
+				} else {
 					isEnabled = false
 					requireActivity().onBackPressedDispatcher.onBackPressed()
 				}
@@ -125,7 +123,6 @@ class CrimeDetailFragment : Fragment() {
 
 			crimeSuspect.isEnabled = canResolveIntent(selectSuspectIntent)
 
-			crimePhoto.isEnabled = false
 
 			crimeCamera.setOnClickListener {
 				photoName = "IMG_${Date()}.JPG"
@@ -137,22 +134,25 @@ class CrimeDetailFragment : Fragment() {
 				)
 
 				takePhoto.launch(photoUri)
-
-				crimePhoto.isEnabled = true
 			}
+
+			crimePhoto.isEnabled = false
 
 			crimePhoto.setOnClickListener {
 				val zoomedPictureDialogFragment = ZoomedPictureDialogFragment.newInstance(
 					crimeDetailViewModel.crime.value?.photoFileName
 				)
 
-				zoomedPictureDialogFragment.show(childFragmentManager, ZoomedPictureDialogFragment.PICTURE_DIALOG)
+				zoomedPictureDialogFragment.show(
+					childFragmentManager,
+					ZoomedPictureDialogFragment.PICTURE_DIALOG
+				)
 			}
 		}
 
 		viewLifecycleOwner.lifecycleScope.launch {
 			viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-				crimeDetailViewModel.crime.collect {crime ->
+				crimeDetailViewModel.crime.collect { crime ->
 					crime?.let {
 						updateUi(it)
 					}
@@ -238,7 +238,7 @@ class CrimeDetailFragment : Fragment() {
 		}
 	}
 
-	private fun getCrimeReport(crime: Crime) : String {
+	private fun getCrimeReport(crime: Crime): String {
 		val solvedString = if (crime.isSolved) {
 			getString(R.string.crime_report_solved)
 		} else {
@@ -279,7 +279,7 @@ class CrimeDetailFragment : Fragment() {
 			}
 
 			override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-				return when(menuItem.itemId) {
+				return when (menuItem.itemId) {
 					R.id.delete_crime -> {
 						deleteAndExit()
 						true
@@ -332,6 +332,8 @@ class CrimeDetailFragment : Fragment() {
 					)
 					binding.crimePhoto.setImageBitmap(scaledBitmap)
 					binding.crimePhoto.tag = photoFileName
+
+					binding.crimePhoto.isEnabled = true
 				}
 			} else {
 				binding.crimePhoto.setImageBitmap(null)
